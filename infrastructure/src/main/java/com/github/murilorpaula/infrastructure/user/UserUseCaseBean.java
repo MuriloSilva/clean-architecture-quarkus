@@ -11,6 +11,14 @@ import jakarta.inject.Inject;
 @ApplicationScoped
 public class UserUseCaseBean extends UserUseCase {
 
+    /**
+     * Default constructor required by CDI. Delegates to {@link UserUseCase#UserUseCase(UserRepository)}
+     * passing {@code null} so the bean can be proxied before the repository is available.
+     */
+    public UserUseCaseBean() {
+        super(null);
+    }
+
     @Inject
     public UserUseCaseBean(UserRepository repository) {
         super(repository);
