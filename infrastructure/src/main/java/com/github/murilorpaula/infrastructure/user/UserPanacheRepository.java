@@ -21,24 +21,24 @@ public class UserPanacheRepository implements PanacheRepository<UserEntity>, Use
     }
 
     @Override
-    public Optional<User> findById(Long id) {
+    public Optional<User> findUserById(Long id) {
         return Optional.ofNullable(find("id", id).firstResult()).map(UserEntity::toDomain);
     }
 
     @Override
-    public List<User> findAll() {
+    public List<User> listAllUsers() {
         return streamAll().map(UserEntity::toDomain).collect(Collectors.toList());
     }
 
     @Override
-    public User update(User user) {
+    public User updateUser(User user) {
         UserEntity entity = UserEntity.fromDomain(user);
         getEntityManager().merge(entity);
         return user;
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteUserById(Long id) {
         delete("id", id);
     }
 }
