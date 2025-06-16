@@ -7,7 +7,7 @@ Este repositório é um monorepo em Maven contendo dois módulos:
 
 ## Requisitos
 - Java 17+
-- Maven 3.9+ instalado. (Opcionalmente pode-se utilizar o wrapper `./mvnw`.)
+- Maven 3.9+ instalado.
 
 ## Como compilar
 
