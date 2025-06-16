@@ -48,3 +48,17 @@ docker compose down
 └── infrastructure
     └── src/main/java/com/github/murilorpaula/infrastructure
 ```
+
+## Migrations com Flyway
+
+O módulo `infrastructure` utiliza o Flyway para gerenciar as migrações do banco
+de dados. As scripts SQL ficam em `infrastructure/src/main/resources/db/migration`.
+Ao iniciar a aplicação as migrações são executadas automaticamente.
+
+## Documentação com Swagger
+
+As rotas expostas pela aplicação podem ser exploradas através do Swagger UI em
+`/swagger`. A especificação OpenAPI é servida em `/q/openapi`.
+Para que a interface esteja disponível mesmo em ambientes de produção, a
+propriedade `quarkus.swagger-ui.always-include=true` está configurada em
+`application.properties`.
