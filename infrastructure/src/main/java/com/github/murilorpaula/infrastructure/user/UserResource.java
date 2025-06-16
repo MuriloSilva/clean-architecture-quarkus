@@ -1,7 +1,11 @@
 package com.github.murilorpaula.infrastructure.user;
 
-import com.github.murilorpaula.core.user.User;
-import com.github.murilorpaula.core.user.usecase.UserUseCase;
+import com.github.murilorpaula.core.user.domain.User;
+import com.github.murilorpaula.core.user.usecase.CreateUserUseCase;
+import com.github.murilorpaula.core.user.usecase.DeleteUserUseCase;
+import com.github.murilorpaula.core.user.usecase.FindUserByIdUseCase;
+import com.github.murilorpaula.core.user.usecase.ListUsersUseCase;
+import com.github.murilorpaula.core.user.usecase.UpdateUserUseCase;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -19,26 +23,38 @@ import java.util.List;
 public class UserResource {
 
     @Inject
-    UserUseCase useCase;
+    CreateUserUseCase createUser;
+
+    @Inject
+    ListUsersUseCase listUsers;
+
+    @Inject
+    FindUserByIdUseCase findUserById;
+
+    @Inject
+    UpdateUserUseCase updateUser;
+
+    @Inject
+    DeleteUserUseCase deleteUser;
 
     @POST
     @Operation(summary = "Cria um novo usuário")
     public Response create(User user) {
-        User created = useCase.create(user);
+        User created = createUser.execute(user);
         return Response.created(URI.create("/users/" + created.getId())).entity(created).build();
     }
 
     @GET
     @Operation(summary = "Lista todos os usuários")
     public List<User> list() {
-        return useCase.findAll();
+        return listUsers.execute();
     }
 
     @GET
     @Path("/{id}")
     @Operation(summary = "Busca usuário pelo id")
     public Response findById(@PathParam("id") Long id) {
-        return useCase.findById(id)
+        return findUserById.execute(id)
                 .map(Response::ok)
                 .map(Response.ResponseBuilder::build)
                 .orElse(Response.status(Response.Status.NOT_FOUND).build());
@@ -48,7 +64,7 @@ public class UserResource {
     @Path("/{id}")
     @Operation(summary = "Atualiza os dados de um usuário")
     public Response update(@PathParam("id") Long id, User user) {
-        User updated = useCase.update(id, user);
+        User updated = updateUser.execute(id, user);
         return Response.ok(updated).build();
     }
 
@@ -56,6 +72,6 @@ public class UserResource {
     @Path("/{id}")
     @Operation(summary = "Remove um usuário")
     public void delete(@PathParam("id") Long id) {
-        useCase.delete(id);
+        deleteUser.execute(id);
     }
 }
