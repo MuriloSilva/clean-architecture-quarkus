@@ -4,6 +4,7 @@ import com.github.murilorpaula.core.user.domain.User;
 import com.github.murilorpaula.core.user.repository.UserRepository;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 public class UserPanacheRepository implements PanacheRepository<UserEntity>, UserRepository {
 
     @Override
+    @Transactional
     public User save(User user) {
         UserEntity entity = UserMapper.toEntity(user);
         persist(entity);
@@ -31,6 +33,7 @@ public class UserPanacheRepository implements PanacheRepository<UserEntity>, Use
     }
 
     @Override
+    @Transactional
     public User updateUser(User user) {
         UserEntity entity = UserMapper.toEntity(user);
         getEntityManager().merge(entity);
@@ -38,6 +41,7 @@ public class UserPanacheRepository implements PanacheRepository<UserEntity>, Use
     }
 
     @Override
+    @Transactional
     public void deleteUserById(Long id) {
         delete("id", id);
     }
