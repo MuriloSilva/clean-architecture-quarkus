@@ -17,6 +17,8 @@ Execute na raiz do projeto:
 mvn clean install
 ```
 
+As versões do Quarkus são gerenciadas por meio do BOM importado no `pom.xml` da raiz, portanto não é necessário definir versão nas dependências.
+
 Isso compilará os dois módulos. O módulo `infrastructure` gera um aplicativo Quarkus que pode ser executado com:
 
 ```bash
