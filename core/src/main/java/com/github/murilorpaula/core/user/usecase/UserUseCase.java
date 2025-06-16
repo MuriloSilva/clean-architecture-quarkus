@@ -21,19 +21,19 @@ public class UserUseCase {
     }
 
     public Optional<User> findById(Long id) {
-        return repository.findById(id);
+        return repository.findUserById(id);
     }
 
     public List<User> findAll() {
-        return repository.findAll();
+        return repository.listAllUsers();
     }
 
     public User update(Long id, User user) {
         user.setId(id);
-        return repository.update(user);
+        return repository.updateUser(user);
     }
 
     public void delete(Long id) {
-        repository.deleteById(id);
+        repository.deleteUserById(id);
     }
 }
