@@ -1,7 +1,7 @@
 package com.github.murilorpaula.infrastructure.user;
 
-import com.github.murilorpaula.core.user.User;
-import com.github.murilorpaula.core.user.UserRepository;
+import com.github.murilorpaula.core.user.domain.User;
+import com.github.murilorpaula.core.user.repository.UserRepository;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -14,7 +14,7 @@ public class UserPanacheRepository implements PanacheRepository<UserEntity>, Use
 
     @Override
     public User save(User user) {
-        UserEntity entity = UserEntity.fromDomain(user);
+        UserEntity entity = UserMapper.toEntity(user);
         persist(entity);
         user.setId(entity.id);
         return user;
@@ -22,17 +22,17 @@ public class UserPanacheRepository implements PanacheRepository<UserEntity>, Use
 
     @Override
     public Optional<User> findUserById(Long id) {
-        return Optional.ofNullable(find("id", id).firstResult()).map(it -> ((UserEntity) it).toDomain());
+        return Optional.ofNullable(find("id", id).firstResult()).map(it -> UserMapper.toDomain((UserEntity) it));
     }
 
     @Override
     public List<User> listAllUsers() {
-        return streamAll().map(UserEntity::toDomain).collect(Collectors.toList());
+        return streamAll().map(UserMapper::toDomain).collect(Collectors.toList());
     }
 
     @Override
     public User updateUser(User user) {
-        UserEntity entity = UserEntity.fromDomain(user);
+        UserEntity entity = UserMapper.toEntity(user);
         getEntityManager().merge(entity);
         return user;
     }

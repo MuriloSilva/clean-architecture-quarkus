@@ -1,4 +1,4 @@
-package com.github.murilorpaula.core.user;
+package com.github.murilorpaula.core.user.domain;
 
 import java.util.Objects;
 

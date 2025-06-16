@@ -1,4 +1,6 @@
-package com.github.murilorpaula.core.user;
+package com.github.murilorpaula.core.user.repository;
+
+import com.github.murilorpaula.core.user.domain.User;
 
 import java.util.List;
 import java.util.Optional;
