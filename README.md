@@ -7,14 +7,14 @@ Este repositório é um monorepo em Maven contendo dois módulos:
 
 ## Requisitos
 - Java 17+
-- Maven 3.9+ instalado.
+- Não é necessário instalar o Maven manualmente. Utilize o wrapper `./mvnw` que já acompanha o projeto.
 
 ## Como compilar
 
-Execute na raiz do projeto:
+Execute na raiz do projeto (utilizando o Maven Wrapper):
 
 ```bash
-mvn clean install
+./mvnw clean install
 ```
 
 As versões do Quarkus são gerenciadas por meio do BOM importado no `pom.xml` da raiz, portanto não é necessário definir versão nas dependências.
@@ -23,7 +23,7 @@ Isso compilará os dois módulos. O módulo `infrastructure` gera um aplicativo 
 
 ```bash
 cd infrastructure
-mvn quarkus:dev
+../mvnw quarkus:dev
 ```
 
 ## Banco de dados com Docker Compose
