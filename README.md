@@ -26,6 +26,20 @@ cd infrastructure
 mvn quarkus:dev
 ```
 
+## Banco de dados com Docker Compose
+
+Utilize o `docker-compose.yml` na raiz do projeto para subir um container Postgres:
+
+```bash
+docker compose up -d
+```
+
+O banco ficará disponível em `localhost:5432` com usuário `postgres` e senha `postgres`. Para parar e remover o container utilize:
+
+```bash
+docker compose down
+```
+
 ## Estrutura de diretórios
 
 ```
