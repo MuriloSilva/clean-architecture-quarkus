@@ -22,7 +22,7 @@ public class UserPanacheRepository implements PanacheRepository<UserEntity>, Use
 
     @Override
     public Optional<User> findUserById(Long id) {
-        return Optional.ofNullable(find("id", id).firstResult()).map(UserEntity::toDomain);
+        return Optional.ofNullable(find("id", id).firstResult()).map(it -> ((UserEntity) it).toDomain());
     }
 
     @Override
