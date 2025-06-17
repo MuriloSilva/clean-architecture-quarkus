@@ -22,7 +22,14 @@ As versões do Quarkus são gerenciadas por meio do BOM importado no `pom.xml` d
 Isso compilará os dois módulos. O módulo `infrastructure` gera um aplicativo Quarkus que pode ser executado com:
 
 ```bash
-./mvnw --project infraestructure quarkus:dev
+./mvnw --project infrastructure quarkus:dev
+```
+
+Por padrão o perfil utiliza um banco H2 em memória com console acessível em `/h2`.
+Para executar utilizando o Postgres, ative o perfil `qa`:
+
+```bash
+./mvnw --project infrastructure quarkus:dev -Dquarkus.profile=qa
 ```
 
 ## Banco de dados com Docker Compose
@@ -60,4 +67,4 @@ As rotas expostas pela aplicação podem ser exploradas através do Swagger UI e
 `/swagger`. A especificação OpenAPI é servida em `/q/openapi`.
 Para que a interface esteja disponível mesmo em ambientes de produção, a
 propriedade `quarkus.swagger-ui.always-include=true` está configurada em
-`application.properties`.
+`application.yaml`.
