@@ -1,0 +1,16 @@
+quarkus:
+  datasource:
+    db-kind: h2
+    jdbc:
+      url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
+    username: sa
+    password: sa
+  hibernate-orm:
+    database:
+      generation: validate
+  flyway:
+    migrate-at-start: true
+    locations: db/migration
+  swagger-ui:
+    always-include: true
+    path: /swagger
