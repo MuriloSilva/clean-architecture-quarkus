@@ -22,7 +22,7 @@ As versões do Quarkus são gerenciadas por meio do BOM importado no `pom.xml` d
 Isso compilará os dois módulos. O módulo `infrastructure` gera um aplicativo Quarkus que pode ser executado com:
 
 ```bash
-../mvnw --project infraestructure quarkus:dev
+./mvnw --project infraestructure quarkus:dev
 ```
 
 ## Banco de dados com Docker Compose
