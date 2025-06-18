@@ -1,8 +1,10 @@
-package com.github.murilorpaula.infrastructure.user;
+package com.github.murilorpaula.infrastructure.repository;
 
 import com.github.murilorpaula.core.user.domain.User;
 import com.github.murilorpaula.core.user.repository.UserRepository;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import com.github.murilorpaula.infrastructure.entity.UserEntity;
+import com.github.murilorpaula.infrastructure.mapper.UserMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 

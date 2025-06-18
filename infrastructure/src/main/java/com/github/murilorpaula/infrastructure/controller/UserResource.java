@@ -1,4 +1,4 @@
-package com.github.murilorpaula.infrastructure.user;
+package com.github.murilorpaula.infrastructure.controller;
 
 import com.github.murilorpaula.core.user.domain.User;
 import com.github.murilorpaula.core.user.usecase.CreateUserUseCase;

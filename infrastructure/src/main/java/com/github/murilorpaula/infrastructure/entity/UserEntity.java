@@ -1,4 +1,4 @@
-package com.github.murilorpaula.infrastructure.user;
+package com.github.murilorpaula.infrastructure.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

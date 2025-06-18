@@ -1,4 +1,4 @@
-package com.github.murilorpaula.infrastructure.user;
+package com.github.murilorpaula.infrastructure.config;
 
 import com.github.murilorpaula.core.user.repository.UserRepository;
 import com.github.murilorpaula.core.user.usecase.*;
