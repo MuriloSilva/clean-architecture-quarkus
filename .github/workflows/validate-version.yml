@@ -1,0 +1,54 @@
+name: Validate Version
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Extract PR version
+        id: pr
+        run: |
+          pr_version=$(grep -m 1 '<version>' pom.xml | sed -E 's/.*<version>([^<]+)<\/version>.*/\1/')
+          echo "version=$pr_version" >> "$GITHUB_OUTPUT"
+
+      - name: Fetch main branch pom.xml
+        run: |
+          git fetch origin main --depth=1
+          git show origin/main:pom.xml > main_pom.xml
+
+      - name: Extract main version
+        id: main
+        run: |
+          main_version=$(grep -m 1 '<version>' main_pom.xml | sed -E 's/.*<version>([^<]+)<\/version>.*/\1/')
+          echo "version=$main_version" >> "$GITHUB_OUTPUT"
+
+      - name: Compare versions
+        run: |
+          pip install packaging
+          python - <<'PY'
+import os, re, sys
+from packaging import version
+pr_version = os.environ['PR_VERSION']
+main_version = os.environ['MAIN_VERSION']
+
+def norm(v):
+    return re.sub(r'-SNAPSHOT$', '.dev0', v)
+
+if version.parse(norm(pr_version)) <= version.parse(norm(main_version)):
+    print(f"Version {pr_version} is not greater than main branch version {main_version}")
+    sys.exit(1)
+
+print(f"Version {pr_version} is greater than main branch version {main_version}")
+PY
+        env:
+          PR_VERSION: ${{ steps.pr.outputs.version }}
+          MAIN_VERSION: ${{ steps.main.outputs.version }}
