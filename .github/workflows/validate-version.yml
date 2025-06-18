@@ -40,7 +40,16 @@ jobs:
       - name: Compare versions
         run: |
           pip install packaging
-          python -c "import os,re,sys; from packaging import version; pr_version=os.environ['PR_VERSION']; main_version=os.environ['MAIN_VERSION']; norm=lambda v: re.sub(r'-SNAPSHOT$', '.dev0', v); cmp=version.parse(norm(pr_version)) <= version.parse(norm(main_version)); print(f'Version {pr_version} is not greater than main branch version {main_version}') if cmp else print(f'Version {pr_version} is greater than main branch version {main_version}'); sys.exit(1) if cmp else None"
+          python -c "
+          import os,re,sys; 
+          from packaging import version; 
+          pr_version=os.environ['PR_VERSION']; 
+          main_version=os.environ['MAIN_VERSION']; 
+          norm=lambda v: re.sub(r'-SNAPSHOT$', '.dev0', v); 
+          cmp=version.parse(norm(pr_version)) <= version.parse(norm(main_version)); 
+          print(f'Version {pr_version} is not greater than main branch version {main_version}') if cmp else print(f'Version {pr_version} is greater than main branch version {main_version}'); 
+          sys.exit(1) if cmp else None
+          "
         env:
           PR_VERSION: ${{ steps.pr.outputs.version }}
           MAIN_VERSION: ${{ steps.main.outputs.version }}
