@@ -34,7 +34,8 @@ jobs:
           v=os.environ['VERSION']; 
           m=re.match(r'(\\d+)\\.(\\d+)\\.(\\d+)(.*)', v); 
           sys.exit('Invalid version') if not m else None; 
-          maj, mi, pa, suf = m.groups(); print(f'{maj}.{mi}.{int(pa)+1}{suf}')
+          maj, mi, pa, suf = m.groups(); 
+          print(f'{maj}.{mi}.{int(pa)+1}{suf}')
           ")
           ./mvnw -q versions:set -DnewVersion="$new_version" -DgenerateBackupPoms=false
           git config user.name "github-actions"
