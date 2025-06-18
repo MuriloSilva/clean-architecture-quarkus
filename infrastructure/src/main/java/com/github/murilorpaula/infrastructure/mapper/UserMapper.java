@@ -1,6 +1,7 @@
-package com.github.murilorpaula.infrastructure.user;
+package com.github.murilorpaula.infrastructure.mapper;
 
 import com.github.murilorpaula.core.user.domain.User;
+import com.github.murilorpaula.infrastructure.entity.UserEntity;
 
 public class UserMapper {
     public static UserEntity toEntity(User user) {

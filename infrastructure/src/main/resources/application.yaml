@@ -14,7 +14,3 @@ quarkus:
   swagger-ui:
     always-include: true
     path: /swagger
-  h2:
-    console:
-      enabled: true
-      path: /h2

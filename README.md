@@ -25,7 +25,7 @@ Isso compilará os dois módulos. O módulo `infrastructure` gera um aplicativo 
 ./mvnw --project infrastructure quarkus:dev
 ```
 
-Por padrão o perfil utiliza um banco H2 em memória com console acessível em `/h2`.
+Por padrão o perfil utiliza um banco H2 em memória.
 Para executar utilizando o Postgres, ative o perfil `qa`:
 
 ```bash
