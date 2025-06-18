@@ -1,0 +1,46 @@
+name: Validate and Bump Version
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+      - name: Fetch main branch
+        run: git fetch origin main
+      - name: Get main version
+        id: main
+        run: |
+          git show origin/main:pom.xml > main-pom.xml
+          MAIN_VERSION=$(grep -m1 -oP '(?<=<version>)[^<]+' main-pom.xml)
+          echo "MAIN_VERSION=$MAIN_VERSION" >> $GITHUB_ENV
+      - name: Get PR version
+        id: pr
+        run: |
+          PR_VERSION=$(grep -m1 -oP '(?<=<version>)[^<]+' pom.xml)
+          echo "PR_VERSION=$PR_VERSION" >> $GITHUB_ENV
+      - name: Validate and bump if needed
+        run: |
+          MAIN=$(echo "$MAIN_VERSION" | sed 's/-SNAPSHOT//')
+          CURRENT=$(echo "$PR_VERSION" | sed 's/-SNAPSHOT//')
+          if dpkg --compare-versions "$CURRENT" "lt" "$MAIN"; then
+            echo "::error::Version $PR_VERSION must not be less than main ($MAIN_VERSION)"
+            exit 1
+          elif dpkg --compare-versions "$CURRENT" "eq" "$MAIN"; then
+            VERSION=$PR_VERSION
+            BASE=${VERSION%-SNAPSHOT}
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$BASE"
+            PATCH=$((PATCH + 1))
+            NEW_VERSION="$MAJOR.$MINOR.$PATCH-SNAPSHOT"
+            sed -i '0,/<version>[^<]*<\/version>/{s/<version>[^<]*<\/version>/<version>'"$NEW_VERSION"'<\/version>/}' pom.xml
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -am "chore: bump version to $NEW_VERSION"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
