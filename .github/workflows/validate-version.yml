@@ -44,10 +44,10 @@ jobs:
               return re.sub(r'-SNAPSHOT$', '.dev0', v)
           
           if version.parse(norm(pr_version)) <= version.parse(norm(main_version)):
-              print(f"Version {pr_version} is not greater than main branch version {main_version}")
+              print(f'Version {pr_version} is not greater than main branch version {main_version}')
               sys.exit(1)
           
-          print(f"Version {pr_version} is greater than main branch version {main_version}")
+          print(f'Version {pr_version} is greater than main branch version {main_version}')
           "
         env:
           PR_VERSION: ${{ steps.pr.outputs.version }}
