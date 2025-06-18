@@ -29,7 +29,13 @@ jobs:
       - name: Bump patch version if equal
         if: steps.pr.outputs.version == env.MAIN_VERSION
         run: |
-          new_version=$(python -c "import os,re,sys; v=os.environ['VERSION']; m=re.match(r'(\\d+)\\.(\\d+)\\.(\\d+)(.*)', v); sys.exit('Invalid version') if not m else None; maj, mi, pa, suf = m.groups(); print(f'{maj}.{mi}.{int(pa)+1}{suf}')")
+          new_version=$(python -c "
+          import os,re,sys; 
+          v=os.environ['VERSION']; 
+          m=re.match(r'(\\d+)\\.(\\d+)\\.(\\d+)(.*)', v); 
+          sys.exit('Invalid version') if not m else None; 
+          maj, mi, pa, suf = m.groups(); print(f'{maj}.{mi}.{int(pa)+1}{suf}')
+          ")
           ./mvnw -q versions:set -DnewVersion="$new_version" -DgenerateBackupPoms=false
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
