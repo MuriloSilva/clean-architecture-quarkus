@@ -1,18 +1,24 @@
 name: Validate Version
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Auto Bump Version"]
+    types:
+      - completed
 
 jobs:
   check-version:
+    if: >-
+      ${{ github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.pull_requests &&
+      github.event.workflow_run.pull_requests[0].base.ref == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_branch }}
 
       - name: Extract PR version
         id: pr
@@ -34,21 +40,7 @@ jobs:
       - name: Compare versions
         run: |
           pip install packaging
-          python - <<'PY'
-import os, re, sys
-from packaging import version
-pr_version = os.environ['PR_VERSION']
-main_version = os.environ['MAIN_VERSION']
-
-def norm(v):
-    return re.sub(r'-SNAPSHOT$', '.dev0', v)
-
-if version.parse(norm(pr_version)) <= version.parse(norm(main_version)):
-    print(f"Version {pr_version} is not greater than main branch version {main_version}")
-    sys.exit(1)
-
-print(f"Version {pr_version} is greater than main branch version {main_version}")
-PY
+          python -c "import os,re,sys; from packaging import version; pr_version=os.environ['PR_VERSION']; main_version=os.environ['MAIN_VERSION']; norm=lambda v: re.sub(r'-SNAPSHOT$', '.dev0', v); cmp=version.parse(norm(pr_version)) <= version.parse(norm(main_version)); print(f'Version {pr_version} is not greater than main branch version {main_version}') if cmp else print(f'Version {pr_version} is greater than main branch version {main_version}'); sys.exit(1) if cmp else None"
         env:
           PR_VERSION: ${{ steps.pr.outputs.version }}
           MAIN_VERSION: ${{ steps.main.outputs.version }}
