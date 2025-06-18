@@ -23,7 +23,7 @@ jobs:
       - name: Get main version
         run: |
           git fetch origin main --depth=1
-          main_version=$(git show origin/main:pom.xml | grep -m 1 '<version>' | sed -E 's/.*<version>([^<]+)<\\/version>.*/\1/')
+          main_version=$(git show origin/main:pom.xml | grep -m 1 '<version>' | sed -E 's#.*<version>([^<]+)</version>.*#\1#')
           echo "MAIN_VERSION=$main_version" >> $GITHUB_ENV
 
       - name: Bump patch version if equal
