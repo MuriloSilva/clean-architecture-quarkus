@@ -45,5 +45,3 @@ jobs:
           git push origin HEAD:${{ github.head_ref }}
         env:
           VERSION: ${{ steps.pr.outputs.version }}
-
-          
