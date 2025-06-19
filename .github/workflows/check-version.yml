@@ -1,0 +1,41 @@
+name: Check Version
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Fetch main branch
+        run: git fetch origin main
+
+      - name: Get main version
+        id: main
+        run: |
+          git show origin/main:pom.xml > main-pom.xml
+          MAIN_VERSION=$(grep -m1 -oP '(?<=<version>)[^<]+' main-pom.xml)
+          echo "MAIN_VERSION=$MAIN_VERSION" >> $GITHUB_ENV
+
+      - name: Get PR version
+        id: pr
+        run: |
+          PR_VERSION=$(grep -m1 -oP '(?<=<version>)[^<]+' pom.xml)
+          echo "PR_VERSION=$PR_VERSION" >> $GITHUB_ENV
+
+      - name: Validate version
+        run: |
+          MAIN=$(echo "$MAIN_VERSION" | sed 's/-SNAPSHOT//')
+          CURRENT=$(echo "$PR_VERSION" | sed 's/-SNAPSHOT//')
+
+          if dpkg --compare-versions "$CURRENT" "le" "$MAIN"; then
+            echo "::error::Version $PR_VERSION is not greater than main ($MAIN_VERSION)"
+            exit 1
+          else
+            echo "Version $PR_VERSION is valid (greater than main $MAIN_VERSION)"
+          fi
