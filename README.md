@@ -1,4 +1,4 @@
-# Clean Architecture Quarkus
+# Clean Architecture with Quarkus
 
 Este repositório é um monorepo em Maven contendo dois módulos:
 
