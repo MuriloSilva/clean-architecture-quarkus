@@ -35,4 +35,4 @@ jobs:
           git commit -am "chore: bump version to $NEW_VERSION"
 
           # push explicitamente para main
-          git push origin HEAD:main
+          git push origin HEAD:main --force
