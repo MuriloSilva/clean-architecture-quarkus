@@ -1,0 +1,38 @@
+name: Bump Version on Merge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  bump-on-main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get main version
+        id: main
+        run: |
+          MAIN_VERSION=$(grep -m1 -oP '(?<=<version>)[^<]+' pom.xml)
+          echo "MAIN_VERSION=$MAIN_VERSION" >> $GITHUB_ENV
+
+      - name: Bump version if needed
+        run: |
+          CURRENT=$(echo "$MAIN_VERSION" | sed 's/-SNAPSHOT//')
+
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="${MAJOR}.${MINOR}.${NEW_PATCH}-SNAPSHOT"
+
+          echo "Bumping version from $MAIN_VERSION to $NEW_VERSION"
+          sed -i '0,/<version>[^<]*<\/version>/{s#<version>[^<]*</version>#<version>'"$NEW_VERSION"'</version>#}' pom.xml
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: bump version to $NEW_VERSION"
+
+          # push explicitamente para main
+          git push origin HEAD:main
